@@ -7,6 +7,7 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
+    base: '/fortune_telling2/',
     define: {
       'process.env': JSON.stringify(env),
     },
