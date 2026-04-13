@@ -98,7 +98,9 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const apiKey = (typeof process !== 'undefined' && process.env) ? (process.env.GEMINI_API_KEY || process.env.API_KEY) : '';
+      const apiKey = (typeof process !== 'undefined' && process.env) 
+        ? (process.env.GEMINI_API_KEY || process.env.API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY) 
+        : (import.meta as any).env?.VITE_GEMINI_API_KEY;
       
       if (!apiKey) {
         throw new Error("系統尚未配置 API 金鑰");
