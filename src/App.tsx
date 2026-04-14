@@ -109,13 +109,23 @@ export default function App() {
       const ai = new GoogleGenAI({ apiKey });
       const randomTheme = themes[Math.floor(Math.random() * themes.length)];
 
+      // Determine fortune type based on probabilities:
+      // 大吉: 30%, 中吉: 30%, 小吉: 30%, 末吉: 10%, 平: 0%
+      const rand = Math.random();
+      let selectedType = "小吉";
+      if (rand < 0.3) selectedType = "大吉";
+      else if (rand < 0.6) selectedType = "中吉";
+      else if (rand < 0.9) selectedType = "小吉";
+      else selectedType = "末吉";
+
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `請以此主題生成一份繁體中文侘寂風籤詩：${randomTheme}。
+        這張籤的等級必須是：${selectedType}。
         請回傳 JSON 格式，包含：
         - poem: 四句詩，每句用 \\n 換行
         - advice: 一句溫暖建議
-        - type: 大吉/中吉/小吉/末吉/平
+        - type: 必須回傳 "${selectedType}"
         - theme: 主題名稱`,
         config: {
           responseMimeType: "application/json",
@@ -134,9 +144,12 @@ export default function App() {
 
       const result = safeJsonParse(response.text);
       
-      if (!result || !result.poem || !result.type) {
+      if (!result || !result.poem) {
         throw new Error("籤詩感應不全，請再試一次");
       }
+
+      // Force the selected type to ensure probabilities are strictly followed
+      result.type = selectedType;
 
       const randomActivity = GROUNDED_ACTIVITIES[Math.floor(Math.random() * GROUNDED_ACTIVITIES.length)];
       
