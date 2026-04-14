@@ -273,29 +273,24 @@ export default function App() {
         </button>
       </div>
 
-      <div className="fixed top-8 left-0 right-0 flex justify-center pointer-events-none z-40">
+      <div className="fixed top-6 left-0 right-0 flex justify-center pointer-events-none z-40">
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-serif text-[14px] tracking-[0.5em] text-wabi-muted uppercase"
+          className="flex items-center gap-3 sm:gap-6"
         >
-          {new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, ' . ')}
+          <div className="w-5 h-5 sm:w-10 sm:h-10 rounded-full bg-wabi-stamp shadow-inner" />
+          <div className="font-serif text-xl sm:text-4xl tracking-[0.3em] text-wabi-ink font-bold">
+            和敬清寂
+          </div>
         </motion.div>
       </div>
 
-      <main className="relative z-10 w-full max-w-5xl flex flex-col items-center mt-24">
+      <main className="relative z-10 w-full max-w-5xl flex flex-col items-center mt-12 sm:mt-16">
         <AnimatePresence mode="wait">
           {!fortune ? (
-            <div className="w-full space-y-12">
-              <div className="flex flex-col lg:flex-row gap-12 items-start">
-                {/* Left Vertical Text */}
-                <div className="hidden lg:flex flex-col items-center gap-6 pt-12">
-                  <div className="w-10 h-10 rounded-full bg-wabi-stamp shadow-inner" />
-                  <div className="writing-vertical font-serif text-3xl tracking-[0.5em] text-wabi-ink font-bold">
-                    和敬清寂
-                  </div>
-                </div>
-
+            <div className="w-full space-y-8 sm:space-y-12">
+              <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                 {/* Main Hero Card */}
                 <motion.div
                   key="landing"
@@ -309,12 +304,12 @@ export default function App() {
                       <span className="text-[10px] tracking-[0.4em] text-wabi-muted uppercase font-medium">
                         Japanese Traditional
                       </span>
-                      <h1 className="font-serif text-3xl sm:text-5xl leading-tight text-wabi-ink">
+                      <h1 className="font-serif text-[33px] sm:text-5xl leading-tight text-wabi-ink">
                         感受四季流轉的<br />細膩與靜謐
                       </h1>
                       <p className="text-wabi-muted font-serif leading-relaxed text-xs sm:text-sm max-w-md whitespace-pre-line">
                         濁りなき　心の水に　すむ月は 波も砕けて　光とぞなる{"\n"}
-                        問一個問題後，抽一張今日籤詩，問題即答案
+                        <span className="text-wabi-stamp">問一個問題後，抽一張今日籤詩，問題即答案</span>
                       </p>
                     </div>
 
