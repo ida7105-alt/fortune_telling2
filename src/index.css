@@ -5,16 +5,20 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Noto Serif TC", serif;
   
-  --color-wabi-bg: #f5f5f0;
-  --color-wabi-ink: #2d2d2d;
-  --color-wabi-muted: #8c8c84;
-  --color-wabi-accent: #5a5a40;
-  --color-wabi-paper: #ffffff;
+  --color-wabi-bg: #fdfaf3;
+  --color-wabi-ink: #2D2D2D;
+  --color-wabi-muted: #8C8C84;
+  --color-wabi-accent: #A6915C;
+  --color-wabi-stamp: #B03A2E;
+  --color-wabi-paper: #FFFFFF;
 }
 
 @layer base {
   body {
-    @apply bg-[#0f1a1a] text-wabi-ink font-sans antialiased;
+    @apply bg-wabi-bg text-wabi-ink font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+    background-size: 40px 40px;
   }
   
   .writing-vertical {
@@ -24,9 +28,9 @@
 }
 
 .wabi-card {
-  @apply bg-[#DCDCDC] border border-black/5 rounded-2xl shadow-sm;
+  @apply bg-white border border-black/5 rounded-sm shadow-sm;
 }
 
 .wabi-button {
-  @apply px-8 py-3 bg-gradient-to-b from-[#F0F0F0] to-[#BDBDBD] text-[#333333] rounded-full transition-all duration-300 hover:from-[#FFFFFF] hover:to-[#D0D0D0] hover:text-[#333333] hover:translate-y-[2px] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed border border-black/5 shadow-sm cursor-pointer;
+  @apply px-10 py-3 bg-transparent text-wabi-ink border border-wabi-ink transition-all duration-300 hover:bg-wabi-ink hover:text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-serif tracking-widest;
 }

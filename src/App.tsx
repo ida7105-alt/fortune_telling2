@@ -6,7 +6,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, RefreshCw, Share2, Wind, Leaf, Moon, Download, Coffee, Volume2, VolumeX, RotateCcw } from 'lucide-react';
+import { Bell, RefreshCw, Share2, Wind, Leaf, Moon, Download, Coffee, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -251,68 +251,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 sm:p-12 selection:bg-wabi-accent/20 transition-colors duration-1000" style={{ backgroundColor: '#0f1a1a' }}>
-      {/* Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Water Base Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f1a1a] to-[#354b4b]" />
-        
-        {/* Shimmering Water Effect (Caustics) */}
-        <div className="absolute inset-0 opacity-[0.3]">
-          {[...Array(3)].map((_, i) => (
-            <motion.div 
-              key={i}
-              animate={{ 
-                x: [0, 30 * (i + 1), 0],
-                y: [0, 20 * (i + 1), 0],
-                scale: [1, 1.1, 1],
-                opacity: [0.2, 0.5, 0.2]
-              }}
-              transition={{ 
-                duration: 10 + i * 5, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-              className="absolute inset-[-50%] opacity-40"
-              style={{
-                backgroundImage: `
-                  radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 1%),
-                  radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.3) 0%, transparent 1.5%),
-                  radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.4) 0%, transparent 1.2%),
-                  radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.3) 0%, transparent 1.8%),
-                  radial-gradient(circle at 60% 40%, rgba(255, 255, 255, 0.4) 0%, transparent 1.3%),
-                  radial-gradient(circle at 30% 60%, rgba(255, 255, 255, 0.3) 0%, transparent 1.1%),
-                  radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.4) 0%, transparent 1.4%),
-                  radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 1.6%)
-                `,
-                backgroundSize: '200px 200px',
-                filter: 'blur(8px)',
-                mixBlendMode: 'screen'
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Deep Water Ripples */}
-        <div className="absolute inset-0 opacity-[0.2]">
-          <motion.div 
-            animate={{ 
-              opacity: [0.1, 0.3, 0.1],
-              scale: [1, 1.05, 1]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%)',
-              mixBlendMode: 'overlay'
-            }}
-          />
-        </div>
-      </div>
+    <div className="min-h-screen flex flex-col items-center p-6 sm:p-12 selection:bg-wabi-accent/20 transition-colors duration-1000">
+      {/* Background Grid is handled in index.css */}
 
       {/* Audio Element */}
       <audio
@@ -326,162 +266,216 @@ export default function App() {
         <button 
           type="button"
           onClick={toggleMute}
-          className="p-3 rounded-full bg-[#DCDCDC] border border-black/5 hover:opacity-90 transition-all text-[#333333] pointer-events-auto cursor-pointer"
+          className="p-3 rounded-full bg-white/80 border border-black/5 hover:bg-white transition-all text-wabi-ink pointer-events-auto cursor-pointer shadow-sm"
           title={isMuted ? "開啟聲音" : "靜音"}
         >
           {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
         </button>
       </div>
 
-      <div className="fixed top-20 sm:top-8 left-0 right-0 flex justify-center pointer-events-none z-40">
+      <div className="fixed top-8 left-0 right-0 flex justify-center pointer-events-none z-40">
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-serif text-[24px] tracking-[0.3em] text-white/80 drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
+          className="font-serif text-[14px] tracking-[0.5em] text-wabi-muted uppercase"
         >
           {new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, ' . ')}
         </motion.div>
       </div>
 
-      <main className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-32 sm:mt-16">
+      <main className="relative z-10 w-full max-w-5xl flex flex-col items-center mt-24">
         <AnimatePresence mode="wait">
           {!fortune ? (
-            <motion.div
-              key="landing"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="text-center space-y-12"
-            >
-              <div className="space-y-4">
+            <div className="w-full space-y-12">
+              <div className="flex flex-col lg:flex-row gap-12 items-start">
+                {/* Left Vertical Text */}
+                <div className="hidden lg:flex flex-col items-center gap-6 pt-12">
+                  <div className="w-10 h-10 rounded-full bg-wabi-stamp shadow-inner" />
+                  <div className="writing-vertical font-serif text-3xl tracking-[0.5em] text-wabi-ink font-bold">
+                    和敬清寂
+                  </div>
+                </div>
+
+                {/* Main Hero Card */}
                 <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="inline-block p-4 rounded-full bg-[#DCDCDC] border border-black/5 mb-4"
+                  key="landing"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="flex-1 wabi-card overflow-hidden flex flex-col md:flex-row min-h-[400px] sm:min-h-[450px]"
                 >
-                  <Wind className="w-8 h-8 text-[#333333]" />
-                </motion.div>
-                <h1 className="font-serif text-4xl sm:text-5xl tracking-widest text-white">
-                  日和籤詩
-                </h1>
-                <p className="text-white/60 font-serif tracking-[0.3em] text-[14px] uppercase opacity-80">
-                  Wabi-Sabi Daily Wisdom
-                </p>
-              </div>
+                  <div className="flex-1 p-8 sm:p-16 flex flex-col justify-center space-y-6 sm:space-y-8">
+                    <div className="space-y-4">
+                      <span className="text-[10px] tracking-[0.4em] text-wabi-muted uppercase font-medium">
+                        Japanese Traditional
+                      </span>
+                      <h1 className="font-serif text-3xl sm:text-5xl leading-tight text-wabi-ink">
+                        感受四季流轉的<br />細膩與靜謐
+                      </h1>
+                      <p className="text-wabi-muted font-serif leading-relaxed text-xs sm:text-sm max-w-md whitespace-pre-line">
+                        濁りなき　心の水に　すむ月は 波も砕けて　光とぞなる{"\n"}
+                        問一個問題後，抽一張今日籤詩，問題即答案
+                      </p>
+                    </div>
 
-              <div className="w-px h-24 bg-gradient-to-b from-wabi-ink/20 to-transparent mx-auto" />
+                    <div className="pt-4">
+                      <button
+                        type="button"
+                        onClick={() => drawFortune()}
+                        disabled={loading || draws.count >= 3}
+                        className={cn(
+                          "wabi-button",
+                          draws.count >= 3 && "opacity-50 cursor-not-allowed"
+                        )}
+                      >
+                        <span className="relative z-10 flex items-center gap-3">
+                          {loading ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Bell className="w-4 h-4" />
+                          )}
+                          {loading ? "正在感應..." : draws.count >= 3 ? "今日緣分已滿" : "今日籤詩"}
+                        </span>
+                      </button>
+                      <p className="mt-4 text-[9px] tracking-[0.2em] text-wabi-muted uppercase opacity-60">
+                        每日限抽 3 次 · 今日剩餘 {Math.max(0, 3 - draws.count)} 次
+                      </p>
+                    </div>
 
-              <div className="space-y-4">
-                <button
-                  type="button"
-                  onClick={() => drawFortune()}
-                  disabled={loading || draws.count >= 3}
-                  className={cn(
-                    "wabi-button group relative overflow-hidden",
-                    draws.count >= 3 && "opacity-50 cursor-not-allowed"
-                  )}
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {loading ? (
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Sparkles className="w-4 h-4" />
+                    {error && (
+                      <p className="text-wabi-stamp text-xs font-light mt-4">{error}</p>
                     )}
-                    {loading ? "正在感應..." : draws.count >= 3 ? "今日緣分已滿" : "求取今日籤詩"}
-                  </span>
-                </button>
-                <p className="text-[10px] tracking-[0.2em] text-wabi-muted uppercase opacity-60">
-                  每日限抽 3 次 · 今日剩餘 {Math.max(0, 3 - draws.count)} 次
-                </p>
+                  </div>
+
+                  {/* Right Image Area */}
+                  <div className="w-full md:w-[40%] h-48 md:h-auto bg-[#EDEDED] relative flex items-center justify-center overflow-hidden">
+                    <div className="absolute top-8 left-8 text-[10px] tracking-[0.2em] text-wabi-muted uppercase font-medium flex items-center gap-2">
+                      <div className="w-4 h-px bg-wabi-muted/30" />
+                      Zen Garden
+                    </div>
+                    <img 
+                      src="https://picsum.photos/seed/zen/800/1200" 
+                      alt="Zen Garden" 
+                      className="w-full h-full object-cover opacity-40 grayscale"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute bottom-12 right-8 writing-vertical bg-white/90 px-2 py-6 text-[10px] tracking-[0.5em] text-wabi-muted border border-black/5">
+                      枯山水
+                    </div>
+                  </div>
+                </motion.div>
               </div>
 
-              {error && (
-                <p className="text-red-800/60 text-sm font-light mt-4">{error}</p>
-              )}
-            </motion.div>
+              {/* Bottom Feature Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { char: "花", title: "花鳥風月", desc: "取法自然，將季節感融入設計細節之中。" },
+                  { char: "侘", title: "侘寂之美", desc: "接受不完美，在樸素中發現歲月的痕跡。" },
+                  { char: "間", title: "空間留白", desc: "以無勝有，讓視線與思緒得以自由舒展。" }
+                ].map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + idx * 0.1 }}
+                    className="wabi-card p-6 sm:p-10 flex flex-col items-center text-center space-y-6"
+                  >
+                    <div className="w-16 h-16 rounded-full border border-wabi-accent flex items-center justify-center text-wabi-accent font-serif text-2xl">
+                      {item.char}
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-serif text-lg text-wabi-ink">{item.title}</h3>
+                      <p className="text-xs text-wabi-muted leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           ) : (
             <motion.div
               key={fortune.timestamp}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full space-y-8"
+              className="w-full max-w-3xl space-y-8"
             >
-              <div ref={cardRef} className="wabi-card p-8 sm:p-16 relative overflow-hidden">
+              <div ref={cardRef} className="wabi-card p-8 sm:p-20 relative overflow-hidden">
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                  <Moon className="w-24 h-24" />
+                <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
+                  <Moon className="w-24 h-24 sm:w-32 sm:h-32" />
                 </div>
                 
-                <div className="flex flex-col md:flex-row gap-12 items-center md:items-start justify-between">
+                <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start justify-between">
                   {/* Fortune Type & Theme */}
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="writing-vertical font-serif text-3xl border-2 border-wabi-ink/20 px-2 py-4 rounded-sm">
+                  <div className="flex flex-row md:flex-col items-center gap-4 md:gap-6">
+                    <div className="writing-vertical font-serif text-2xl sm:text-4xl border border-wabi-ink/10 px-2 md:px-3 py-4 md:py-8 rounded-sm bg-wabi-bg/30">
                       {fortune.type}
                     </div>
-                    <div className="writing-vertical text-[10px] tracking-[0.5em] text-wabi-muted font-light uppercase">
+                    <div className="writing-vertical text-[9px] sm:text-[10px] tracking-[0.4em] sm:tracking-[0.6em] text-wabi-muted font-light uppercase">
                       {fortune.theme}
                     </div>
-                    <div className="w-px h-12 bg-wabi-ink/10" />
+                    <div className="hidden md:block w-px h-16 bg-wabi-ink/5" />
                   </div>
 
                   {/* Poem Content */}
-                  <div className="flex-1 text-center md:text-left space-y-8 relative">
+                  <div className="flex-1 text-center md:text-left space-y-8 md:space-y-12 relative">
                     <motion.div 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 1, delay: 0.2 }}
-                      className="font-serif text-2xl sm:text-3xl leading-relaxed tracking-[0.15em] whitespace-pre-line text-wabi-ink/90"
+                      transition={{ duration: 1.2, delay: 0.2 }}
+                      className="font-serif text-2xl sm:text-4xl leading-relaxed tracking-[0.15em] sm:tracking-[0.2em] whitespace-pre-line text-wabi-ink/90"
                     >
                       {fortune.poem}
                     </motion.div>
                     
-                    <div className="space-y-6 pt-8 border-t border-wabi-ink/5">
+                    <div className="space-y-6 md:space-y-8 pt-8 md:pt-12 border-t border-wabi-ink/5">
                       <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.6 }}
-                        className="space-y-2"
+                        transition={{ duration: 1.2, delay: 0.8 }}
+                        className="space-y-2 md:space-y-3"
                       >
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-wabi-muted font-semibold block">
+                        <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] sm:tracking-[0.4em] text-wabi-muted font-semibold block">
                           禪師寄語
                         </span>
-                        <p className="text-wabi-ink/70 font-light italic text-lg">
+                        <p className="text-wabi-ink/80 font-serif italic text-lg sm:text-xl leading-relaxed">
                           「 {fortune.advice} 」
                         </p>
                       </motion.div>
 
-                      <div className="flex flex-col p-4 bg-wabi-muted/5 rounded-lg border border-wabi-muted/10 w-full">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Coffee className="w-3 h-3 text-wabi-muted" />
-                          <span className="text-[9px] uppercase tracking-wider text-wabi-muted">轉運小Tip</span>
+                      <div className="flex flex-col p-6 bg-wabi-bg/50 rounded-sm border border-black/5 w-full">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Coffee className="w-3 h-3 text-wabi-accent" />
+                          <span className="text-[9px] uppercase tracking-widest text-wabi-muted font-bold">轉運小Tip</span>
                         </div>
-                        <span className="text-sm text-wabi-ink/70 font-medium">{fortune.reminder}</span>
+                        <span className="text-sm text-wabi-ink/70 font-serif leading-relaxed">{fortune.reminder}</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center justify-center gap-6">
                 <button
                   onClick={reset}
-                  className="p-3 rounded-full bg-[#DCDCDC] border border-black/5 hover:opacity-90 transition-all text-[#333333] cursor-pointer"
+                  className="p-4 rounded-full bg-white border border-black/5 hover:bg-wabi-bg transition-all text-wabi-ink cursor-pointer shadow-sm"
                   title="重新求籤"
                 >
                   <RefreshCw className="w-5 h-5" />
                 </button>
                 <button
                   onClick={generateShareLink}
-                  className="p-3 rounded-full bg-[#DCDCDC] border border-black/5 hover:opacity-90 transition-all text-[#333333] relative cursor-pointer"
+                  className="p-4 rounded-full bg-white border border-black/5 hover:bg-wabi-bg transition-all text-wabi-ink relative cursor-pointer shadow-sm"
                   title="複製分享連結"
                 >
                   <AnimatePresence>
                     {shareLinkCopied && (
                       <motion.span
                         initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: -30 }}
+                        animate={{ opacity: 1, y: -40 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 flex items-center justify-center text-[10px] whitespace-nowrap text-wabi-accent font-medium"
+                        className="absolute inset-0 flex items-center justify-center text-[10px] whitespace-nowrap text-wabi-accent font-bold tracking-widest"
                       >
                         連結已複製
                       </motion.span>
@@ -492,7 +486,7 @@ export default function App() {
                 <button
                   onClick={downloadAsImage}
                   disabled={isDownloading}
-                  className="p-3 rounded-full bg-[#DCDCDC] border border-black/5 hover:opacity-90 transition-all text-[#333333] relative cursor-pointer"
+                  className="p-4 rounded-full bg-white border border-black/5 hover:bg-wabi-bg transition-all text-wabi-ink relative cursor-pointer shadow-sm"
                   title="下載為圖片"
                 >
                   <AnimatePresence>
@@ -518,12 +512,12 @@ export default function App() {
       <footer className="mt-auto pt-16 pb-12 flex flex-col items-center gap-4 relative z-10">
         <button
           onClick={resetDraws}
-          className="text-[10px] tracking-[0.2em] text-[#b8b8b8] uppercase hover:text-[#ececec] hover:border-[#ececec] transition-all cursor-pointer border border-[#b8b8b8] px-4 py-1.5 rounded-full"
+          className="text-[10px] tracking-[0.2em] text-wabi-muted uppercase hover:text-wabi-ink transition-all cursor-pointer border border-wabi-muted/20 px-4 py-1.5 rounded-full"
           title="重置今日次數"
         >
           Reset Daily Limit
         </button>
-        <div className="text-wabi-muted text-[10px] tracking-[0.4em] uppercase opacity-20">
+        <div className="text-wabi-muted text-[10px] tracking-[0.4em] uppercase opacity-40">
           Finding beauty in the imperfect
         </div>
       </footer>
