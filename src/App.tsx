@@ -122,8 +122,12 @@ export default function App() {
         model: "gemini-3-flash-preview",
         contents: `請以此主題生成一份繁體中文侘寂風籤詩：${randomTheme}。
         這張籤的等級必須是：${selectedType}。
+        
+        請生成四句詩，每句固定為七個字（七言詩）。
+        每句詩之間請使用一個換行符號（\n）分隔，絕對不要在句子中間插入換行符號。
+        
         請回傳 JSON 格式，包含：
-        - poem: 四句詩，每句用 \\n 換行
+        - poem: 四句七言詩，每句之間用 \\n 換行
         - advice: 一句溫暖建議
         - type: 必須回傳 "${selectedType}"
         - theme: 主題名稱`,
@@ -148,8 +152,17 @@ export default function App() {
         throw new Error("籤詩感應不全，請再試一次");
       }
 
+      // Cleanup poem: replace literal \n strings and ensure clean breaks
+      const cleanPoem = result.poem
+        .replace(/\\n/g, '\n')
+        .split('\n')
+        .map((line: string) => line.trim())
+        .filter((line: string) => line.length > 0)
+        .join('\n');
+
       // Force the selected type to ensure probabilities are strictly followed
       result.type = selectedType;
+      result.poem = cleanPoem;
 
       const randomActivity = GROUNDED_ACTIVITIES[Math.floor(Math.random() * GROUNDED_ACTIVITIES.length)];
       
