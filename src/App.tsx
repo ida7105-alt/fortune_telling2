@@ -130,6 +130,7 @@ export default function App() {
         - theme: 主題名稱`,
         config: {
           responseMimeType: "application/json",
+          thinkingConfig: { thinkingBudget: 0 },
           responseSchema: {
             type: Type.OBJECT,
             properties: {
