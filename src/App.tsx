@@ -116,7 +116,7 @@ export default function App() {
       else selectedType = "末吉";
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash-lite-preview-06-17",
         contents: `請以此主題生成一份繁體中文侘寂風籤詩：${randomTheme}。
         這張籤的等級必須是：${selectedType}。
         
