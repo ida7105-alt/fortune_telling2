@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Noto Serif TC", serif;
+  
+  --color-wabi-bg: #fdfaf3;
+  --color-wabi-ink: #2D2D2D;
+  --color-wabi-muted: #8C8C84;
+  --color-wabi-accent: #A6915C;
+  --color-wabi-stamp: #B03A2E;
+  --color-wabi-paper: #FFFFFF;
+}
+
+@layer base {
+  body {
+    @apply bg-wabi-bg text-wabi-ink font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+  
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+}
+
+.wabi-card {
+  @apply bg-white border border-black/5 rounded-sm shadow-sm;
+}
+
+.wabi-button {
+  @apply px-10 py-3 bg-transparent text-wabi-ink border border-wabi-ink transition-all duration-300 hover:bg-wabi-ink hover:text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-serif tracking-widest;
+}
