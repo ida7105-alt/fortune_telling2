@@ -58,7 +58,7 @@ export default function App() {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.2; // Set volume to 20%
+      audioRef.current.volume = 0.2;
     }
   }, []);
 
@@ -72,6 +72,7 @@ export default function App() {
       setIsMuted(prev => !prev);
     }
   }, [isMuted]);
+
   const [draws, setDraws] = useState(() => {
     const saved = localStorage.getItem('wabi_draw_limit');
     const today = new Date().toDateString();
@@ -98,17 +99,15 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-     const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY;
-      
+      const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY;
+
       if (!apiKey) {
         throw new Error("系統尚未配置 API 金鑰");
       }
-      
+
       const ai = new GoogleGenAI({ apiKey });
       const randomTheme = themes[Math.floor(Math.random() * themes.length)];
 
-      // Determine fortune type based on probabilities:
-      // 大吉: 30%, 中吉: 30%, 小吉: 30%, 末吉: 10%, 平: 0%
       const rand = Math.random();
       let selectedType = "小吉";
       if (rand < 0.3) selectedType = "大吉";
@@ -145,12 +144,11 @@ export default function App() {
       });
 
       const result = safeJsonParse(response.text);
-      
+
       if (!result || !result.poem) {
         throw new Error("籤詩感應不全，請再試一次");
       }
 
-      // Cleanup poem: replace literal \n strings and ensure clean breaks
       const cleanPoem = result.poem
         .replace(/\\n/g, '\n')
         .split('\n')
@@ -158,21 +156,19 @@ export default function App() {
         .filter((line: string) => line.length > 0)
         .join('\n');
 
-      // Force the selected type to ensure probabilities are strictly followed
       result.type = selectedType;
       result.poem = cleanPoem;
 
       const randomActivity = GROUNDED_ACTIVITIES[Math.floor(Math.random() * GROUNDED_ACTIVITIES.length)];
-      
-      const newFortune = { 
-        ...result, 
-        reminder: randomActivity.text, 
-        timestamp: Date.now() 
+
+      const newFortune = {
+        ...result,
+        reminder: randomActivity.text,
+        timestamp: Date.now()
       };
-      
+
       setFortune(newFortune);
-      
-      // Update draws
+
       const newCount = draws.count + 1;
       const newDraws = { count: newCount, date: draws.date };
       setDraws(newDraws);
@@ -198,12 +194,12 @@ export default function App() {
 
   const downloadAsImage = async () => {
     if (cardRef.current === null) return;
-    
+
     setIsDownloading(true);
     try {
       const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
-        backgroundColor: '#F5F2ED', // wabi-bg color
+        backgroundColor: '#F5F2ED',
         style: {
           borderRadius: '0',
         }
@@ -220,13 +216,11 @@ export default function App() {
     }
   };
 
-  // Check for shared fortune in URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sharedData = params.get('f');
     if (sharedData) {
       try {
-        // Decode from Base64 (using Unicode safe method)
         const jsonStr = decodeURIComponent(atob(sharedData).split('').map(c => {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
@@ -241,7 +235,6 @@ export default function App() {
   const generateShareLink = () => {
     if (fortune) {
       try {
-        // Encode to Base64 (using Unicode safe method)
         const jsonStr = JSON.stringify(fortune);
         const base64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => {
           return String.fromCharCode(parseInt(p1, 16));
@@ -263,18 +256,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center p-6 sm:p-12 selection:bg-wabi-accent/20 transition-colors duration-1000">
-      {/* Background Grid is handled in index.css */}
-
-      {/* Audio Element */}
       <audio
         ref={audioRef}
-        src="https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3" // Light wind chime/nature sound
+        src="https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3"
         loop
       />
 
-      {/* Control Buttons */}
       <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 flex gap-3 pointer-events-none">
-        <button 
+        <button
           type="button"
           onClick={toggleMute}
           className="p-3 rounded-full bg-white/80 border border-black/5 hover:bg-white transition-all text-wabi-ink pointer-events-auto cursor-pointer shadow-sm"
@@ -285,7 +274,7 @@ export default function App() {
       </div>
 
       <div className="fixed top-6 left-0 right-0 flex justify-center pointer-events-none z-40">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3 sm:gap-6"
@@ -302,7 +291,6 @@ export default function App() {
           {!fortune ? (
             <div className="w-full space-y-8 sm:space-y-12">
               <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-                {/* Main Hero Card */}
                 <motion.div
                   key="landing"
                   initial={{ opacity: 0, y: 20 }}
@@ -353,15 +341,14 @@ export default function App() {
                     )}
                   </div>
 
-                  {/* Right Image Area */}
                   <div className="w-full md:w-[40%] h-48 md:h-auto bg-[#EDEDED] relative flex items-center justify-center overflow-hidden">
                     <div className="absolute top-8 left-8 text-[10px] tracking-[0.2em] text-wabi-muted uppercase font-medium flex items-center gap-2">
                       <div className="w-4 h-px bg-wabi-muted/30" />
                       Zen Garden
                     </div>
-                    <img 
-                      src="https://picsum.photos/seed/zen/800/1200" 
-                      alt="Zen Garden" 
+                    <img
+                      src="https://picsum.photos/seed/zen/800/1200"
+                      alt="Zen Garden"
                       className="w-full h-full object-cover opacity-40 grayscale"
                       referrerPolicy="no-referrer"
                     />
@@ -372,7 +359,6 @@ export default function App() {
                 </motion.div>
               </div>
 
-              {/* Bottom Feature Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   { char: "花", title: "花鳥風月", desc: "取法自然，將季節感融入設計細節之中。" },
@@ -407,13 +393,11 @@ export default function App() {
               className="w-full max-w-3xl space-y-8"
             >
               <div ref={cardRef} className="wabi-card p-8 sm:p-20 relative overflow-hidden">
-                {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                   <Moon className="w-24 h-24 sm:w-32 sm:h-32" />
                 </div>
-                
+
                 <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start justify-between">
-                  {/* Fortune Type & Theme */}
                   <div className="flex flex-row md:flex-col items-center gap-4 md:gap-6">
                     <div className="writing-vertical font-serif text-2xl sm:text-4xl border border-wabi-ink/10 px-2 md:px-3 py-4 md:py-8 rounded-sm bg-wabi-bg/30">
                       {fortune.type}
@@ -424,9 +408,8 @@ export default function App() {
                     <div className="hidden md:block w-px h-16 bg-wabi-ink/5" />
                   </div>
 
-                  {/* Poem Content */}
                   <div className="flex-1 text-center md:text-left space-y-8 md:space-y-12 relative">
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 1.2, delay: 0.2 }}
@@ -434,9 +417,9 @@ export default function App() {
                     >
                       {fortune.poem}
                     </motion.div>
-                    
+
                     <div className="space-y-6 md:space-y-8 pt-8 md:pt-12 border-t border-wabi-ink/5">
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, delay: 0.8 }}
